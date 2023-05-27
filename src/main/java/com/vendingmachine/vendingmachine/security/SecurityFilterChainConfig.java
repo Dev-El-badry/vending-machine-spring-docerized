@@ -50,6 +50,16 @@ public class SecurityFilterChainConfig {
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/actuator/**")
                 .permitAll()
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/v1/products"
+                )
+                .hasAuthority("ROLE_ADMIN")
+                .requestMatchers(
+                        HttpMethod.PUT,
+                        "/api/v1/products/**"
+                )
+                .hasAuthority("ROLE_ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

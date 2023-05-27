@@ -45,8 +45,8 @@ public class UserService {
         User user = new User(
                 request.username(),
                 passwordEncoder.encode(request.password()),
-                request.deposit()
-        );
+                request.deposit(),
+                request.role());
 
         userDao.addUser(user);
     }

@@ -46,17 +46,25 @@ public class User implements UserDetails {
     )
     private Integer deposit;
 
-    public User(Integer id, String username, String password, Integer deposit) {
+    @Column(
+            nullable = false
+    )
+    private String role;
+
+
+    public User(Integer id, String username, String password, Integer deposit, String role) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.deposit = deposit;
+        this.role = role;
     }
 
-    public User(String username, String password, Integer deposit) {
+    public User(String username, String password, Integer deposit, String role) {
         this.username = username;
         this.password = password;
         this.deposit = deposit;
+        this.role = role;
     }
 
     public User() {
@@ -94,9 +102,17 @@ public class User implements UserDetails {
         this.deposit = deposit;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority(getRole()));
     }
 
     @Override

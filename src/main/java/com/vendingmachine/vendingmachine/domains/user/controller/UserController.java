@@ -35,7 +35,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> registerUser(@RequestBody UserRegistrationRequest request) {
         userService.addUser(request);
-        String jwtToken = jwtUtil.issueToken(request.username(), "ROLE_USER");
+        String jwtToken = jwtUtil.issueToken(request.username(), request.role());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, jwtToken)
                 .build();
