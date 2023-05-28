@@ -52,6 +52,10 @@ public class OrderService {
 
         Integer total = product.getPrice() * request.qty();
 
+        if(product.getQty() < request.qty()) {
+            throw new RequestValidationException("don't enough products");
+        }
+
         if (user.getDeposit() < total) {
             throw new RequestValidationException("you don't have enough money to buy");
         }
