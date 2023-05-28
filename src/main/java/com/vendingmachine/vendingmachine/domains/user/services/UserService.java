@@ -61,6 +61,10 @@ public class UserService {
         boolean changes = false;
 
         if(request.username() != null && !request.username().equals(user.getUsername())) {
+            if(userDao.existsUserWithUsername(request.username())) {
+                throw new DuplicateResourceException("username already taken");
+            }
+
             user.setUsername(request.username());
             changes = true;
         }
