@@ -5,6 +5,7 @@ import com.vendingmachine.vendingmachine.domains.product.resources.InsertProduct
 import com.vendingmachine.vendingmachine.domains.product.resources.UpdateProductRequest;
 import com.vendingmachine.vendingmachine.domains.product.services.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,13 @@ public class ProductController {
     @GetMapping
     public List<ProductDTO> getProduct() {
         return productService.getProducts();
+    }
+
+    @GetMapping("{productId}")
+    public ResponseEntity<?> getProductById(@PathVariable("productId") Integer productId) {
+        ProductDTO response = productService.getProduct( productId);
+        return ResponseEntity.ok()
+                .body(response);
     }
 
     @PostMapping

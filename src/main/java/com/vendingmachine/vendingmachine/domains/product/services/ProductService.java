@@ -40,12 +40,7 @@ public class ProductService {
     public void addProduct(InsertProductRequest request) {
         User user = getUser();
 
-        Product product = new Product(
-                request.name(),
-                request.price(),
-                request.qty(),
-                user
-        );
+        Product product = new Product(request.name(), request.price(), request.qty(), user);
 
         productDao.addProduct(product);
     }
@@ -55,22 +50,22 @@ public class ProductService {
 
         boolean changes = false;
 
-        if(!request.name().equals(product.getName())) {
+        if (!request.name().equals(product.getName())) {
             product.setName(request.name());
             changes = true;
         }
 
-        if(!request.price().equals(product.getPrice())) {
+        if (!request.price().equals(product.getPrice())) {
             product.setPrice(request.price());
             changes = true;
         }
 
-        if(!request.qty().equals(product.getQty())) {
+        if (!request.qty().equals(product.getQty())) {
             product.setQty(request.qty());
             changes = true;
         }
 
-        if(!changes) {
+        if (!changes) {
             throw new RequestValidationException("no data changes found");
         }
 
@@ -90,7 +85,12 @@ public class ProductService {
         SecurityContext context = SecurityContextHolder.getContext();
         Object principal = context.getAuthentication().getPrincipal();
 
-        return (String)
-                ((UserDetails) principal).getUsername();
+        return (String) ((UserDetails) principal).getUsername();
+    }
+
+    public ProductDTO getProduct(Integer productId) {
+        return productDao.getProductById(productId)
+                .map(productDTOMapper)
+                .orElseThrow(() -> new ResourceNotFoundException("product with id [%s] not found".formatted(productId)));
     }
 }
