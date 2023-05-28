@@ -54,4 +54,9 @@ public class UserDataAccessRepository implements UserDao {
     public Optional<User> getUserByUsername(String username) {
         return userRepository.findUserByUsername(username);
     }
+
+    @Override
+    public void reset(User user) {
+        userRepository.save(user);
+    }
 }

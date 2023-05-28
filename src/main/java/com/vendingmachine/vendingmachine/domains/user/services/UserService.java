@@ -4,12 +4,17 @@ import com.vendingmachine.vendingmachine.domains.user.daos.UserDao;
 import com.vendingmachine.vendingmachine.domains.user.dtos.UserDTO;
 import com.vendingmachine.vendingmachine.domains.user.dtos.UserDTOMapper;
 import com.vendingmachine.vendingmachine.domains.user.entities.User;
+import com.vendingmachine.vendingmachine.domains.user.resources.UserDepositRequest;
 import com.vendingmachine.vendingmachine.domains.user.resources.UserRegistrationRequest;
 import com.vendingmachine.vendingmachine.domains.user.resources.UserUpdateRequest;
 import com.vendingmachine.vendingmachine.exception.DuplicateResourceException;
+import com.vendingmachine.vendingmachine.exception.NotAllowedException;
 import com.vendingmachine.vendingmachine.exception.RequestValidationException;
 import com.vendingmachine.vendingmachine.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -81,5 +86,32 @@ public class UserService {
         if (!userDao.existsUserWithId(id)) {
             throw new ResourceNotFoundException("user with id [%s] not found".formatted(id));
         }
+    }
+
+    public void reset() {
+        User user = getUser();
+        user.setDeposit(0);
+
+        userDao.reset(user);
+    }
+
+    private User getUser() {
+        String username = getUsernameFromSecurityContext();
+        return userDao.getUserByUsername(username).orElseThrow(() -> new NotAllowedException("not allowed to be here"));
+    }
+
+    private String getUsernameFromSecurityContext() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Object principal = context.getAuthentication().getPrincipal();
+
+        return (String)
+                ((UserDetails) principal).getUsername();
+    }
+
+    public void deposit(UserDepositRequest request) {
+        User user = getUser();
+        user.setDeposit(user.getDeposit() + Integer.parseInt(request.deposit()));
+
+        userDao.updateUser(user);
     }
 }

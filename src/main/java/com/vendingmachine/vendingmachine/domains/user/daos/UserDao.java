@@ -14,4 +14,5 @@ public interface UserDao {
     boolean existsUserWithUsername(String username);
     boolean existsUserWithId(Integer id);
     void deleteUser(Integer id);
+    void reset(User user);
 }

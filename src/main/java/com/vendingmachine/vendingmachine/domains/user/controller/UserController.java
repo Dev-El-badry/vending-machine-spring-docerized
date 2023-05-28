@@ -5,9 +5,12 @@ import com.vendingmachine.vendingmachine.domains.user.resources.UserRegistration
 import com.vendingmachine.vendingmachine.domains.user.resources.UserUpdateRequest;
 import com.vendingmachine.vendingmachine.domains.user.services.UserService;
 import com.vendingmachine.vendingmachine.jwt.JWTUtil;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.vendingmachine.vendingmachine.domains.user.resources.UserDepositRequest;
+
 
 import java.util.List;
 
@@ -25,6 +28,16 @@ public class UserController {
     @GetMapping
     public List<UserDTO> getUsers() {
         return userService.getUsers();
+    }
+
+    @GetMapping("reset")
+    public void reset() {
+        userService.reset();
+    }
+
+    @PostMapping("deposit")
+    public void deposit(@Valid @RequestBody UserDepositRequest request) {
+        userService.deposit(request);
     }
 
     @GetMapping("{userId}")
