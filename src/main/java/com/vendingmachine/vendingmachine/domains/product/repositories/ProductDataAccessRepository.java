@@ -5,6 +5,7 @@ import com.vendingmachine.vendingmachine.domains.product.entities.Product;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository("product_jpa")
 public class ProductDataAccessRepository implements ProductDao {
@@ -21,6 +22,21 @@ public class ProductDataAccessRepository implements ProductDao {
 
     @Override
     public void addProduct(Product product) {
+        productRepository.save(product);
+    }
 
+    @Override
+    public void updateProduct(Product product) {
+        productRepository.save(product);
+    }
+
+    @Override
+    public Optional<Product> getProductById(Integer id) {
+        return productRepository.getProductById(id);
+    }
+
+    @Override
+    public void deleteProductById(Integer id) {
+        productRepository.deleteProductById(id);
     }
 }

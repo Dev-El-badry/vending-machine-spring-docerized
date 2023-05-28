@@ -44,8 +44,7 @@ public class SecurityFilterChainConfig {
                 .permitAll()
                 .requestMatchers(
                         HttpMethod.GET,
-                        "/ping",
-                        "/api/v1/users"
+                        "/ping"
                 )
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/actuator/**")
@@ -57,6 +56,11 @@ public class SecurityFilterChainConfig {
                 .hasAuthority("ROLE_ADMIN")
                 .requestMatchers(
                         HttpMethod.PUT,
+                        "/api/v1/products/**"
+                )
+                .hasAuthority("ROLE_ADMIN")
+                .requestMatchers(
+                        HttpMethod.DELETE,
                         "/api/v1/products/**"
                 )
                 .hasAuthority("ROLE_ADMIN")

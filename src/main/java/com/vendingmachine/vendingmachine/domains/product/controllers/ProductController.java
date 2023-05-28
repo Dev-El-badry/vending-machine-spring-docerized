@@ -2,7 +2,9 @@ package com.vendingmachine.vendingmachine.domains.product.controllers;
 
 import com.vendingmachine.vendingmachine.domains.product.dtos.ProductDTO;
 import com.vendingmachine.vendingmachine.domains.product.resources.InsertProductRequest;
+import com.vendingmachine.vendingmachine.domains.product.resources.UpdateProductRequest;
 import com.vendingmachine.vendingmachine.domains.product.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +24,18 @@ public class ProductController {
     }
 
     @PostMapping
-    public void addProduct(@RequestBody InsertProductRequest request) {
+    public void addProduct(@Valid @RequestBody InsertProductRequest request) {
         productService.addProduct(request);
     }
+
+    @PutMapping("{productId}")
+    public void updateProduct(@PathVariable("productId") Integer productId, @Valid @RequestBody UpdateProductRequest request) {
+        productService.updateProduct(request, productId);
+    }
+
+    @DeleteMapping("{productId}")
+    public void deleteProduct(@PathVariable("productId") Integer productId) {
+        productService.deleteProduct(productId);
+    }
+
 }
